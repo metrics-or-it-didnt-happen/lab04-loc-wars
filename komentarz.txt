@@ -1,0 +1,13 @@
+Komenda:
+cloc ```repos``` --by-file --include-lang=Python --csv --out=comparison.csv
+wygenerowała duży plik comparison.csv z informacją o każdym pliku
+
+Zawarłem też plik comparison.csv.file wygenerowany poprzez:
+
+cloc .\django\ --include-lang=Python --report-file=django.txt
+cloc .\tensorflow\ --include-lang=Python --report-file=tensorflow.txt
+cloc .\yt-dlp\ --include-lang=Python --report-file=yt-dlp.txt
+
+cloc --sum-reports django.txt tensorflow.txt yt-dlp.txt --csv --out=comparison.csv
+
+I to też z niego brałem dane do answers.md
