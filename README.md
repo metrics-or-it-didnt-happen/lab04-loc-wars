@@ -21,9 +21,11 @@ Po tym laboratorium będziesz potrafić:
 ## Wymagania wstępne
 
 - Python 3.9+
-- `cloc` zainstalowany (`sudo apt install cloc` lub `brew install cloc`)
-- matplotlib (do opcjonalnej wizualizacji)
-- Sklonowane 3 projekty open-source (najlepiej w Pythonie)
+- `cloc` zainstalowany — to **narzędzie systemowe**, nie pakiet Pythonowy:
+  - Linux: `sudo apt install cloc`
+  - Mac: `brew install cloc`
+  - Albo z Dockera z lab03 (tam cloc jest już zainstalowany w obrazie)
+- matplotlib (`pip install matplotlib` — do opcjonalnej wizualizacji)
 
 ## Zadania
 
@@ -40,13 +42,16 @@ sudo apt install cloc
 # Mac
 brew install cloc
 
-# Albo z Dockera (lab03):
-docker run -it --rm code-analyzer
+# Albo z Dockera (lab03) — obraz budowany przez docker compose:
+docker compose run --rm analyzer
 ```
 
-**Krok 2:** Sklonuj 3 projekty open-source (Pythonowe, dla porównania):
+**Krok 2:** Sklonuj 3 projekty open-source do katalogu tymczasowego:
+
+> **WAŻNE:** Klonujcie repozytoria do `/tmp` albo innego katalogu POZA waszym repozytorium labowym. Jeśli sklonujecie je do katalogu roboczego i zrobicie `git add .`, commitniecie tysiące cudzych plików. Nie chcecie tego. Nikt tego nie chce.
 
 ```bash
+cd /tmp
 git clone https://github.com/psf/requests.git
 git clone https://github.com/pallets/flask.git
 git clone https://github.com/encode/httpx.git
@@ -57,18 +62,20 @@ Możesz wybrać inne — ważne żeby były w Pythonie i miały co najmniej kilk
 **Krok 3:** Przeanalizuj każdy projekt:
 
 ```bash
-cloc requests/
-cloc flask/
-cloc httpx/
+cloc /tmp/requests/
+cloc /tmp/flask/
+cloc /tmp/httpx/
 ```
 
-**Krok 4:** Porównanie w jednym poleceniu:
+**Krok 4:** Wygeneruj podsumowanie do CSV:
 
 ```bash
-cloc requests/ flask/ httpx/ --by-file --include-lang=Python --csv --out=comparison.csv
+cloc /tmp/requests/ /tmp/flask/ /tmp/httpx/ --include-lang=Python --csv --out=comparison.csv
 ```
 
-**Krok 5:** Odpowiedz na pytania (zapiszcie):
+To daje sumaryczne wyniki per projekt (SLOC, komentarze, puste linie). Jeśli chcesz zobaczyć rozbicie per plik, dodaj `--by-file`, ale uwaga — wyjdzie ponad 100 linii.
+
+**Krok 5:** Odpowiedz na pytania (zapiszcie w `answers.md`):
 
 1. Który projekt jest "największy" (wg SLOC)?
 2. Który ma najlepszy stosunek komentarzy do kodu?
@@ -84,14 +91,16 @@ cloc requests/ flask/ httpx/ --by-file --include-lang=Python --csv --out=compari
 Napisz `loc_counter.py`, który:
 
 1. Przyjmuje ścieżkę do katalogu jako argument
-2. Znajduje wszystkie pliki `.py`
+2. Znajduje wszystkie pliki `.py` (z pominięciem `.venv/`, `venv/`, `__pycache__/`, `.git/`)
 3. Dla każdego pliku liczy:
    - **LOC** — wszystkie linie (łącznie z pustymi i komentarzami)
    - **SLOC** — source lines of code (niepuste, niekomentarzowe)
-   - **Comments** — linie z komentarzami (# i docstringi)
+   - **Comments** — linie z komentarzami (`#` i docstringi)
    - **Blank** — puste linie
 4. Generuje raport per-plik i podsumowanie
 5. Porównuje swoje wyniki z `cloc`
+
+**Ważna zasada:** Każda linia należy do dokładnie jednej kategorii. `LOC = SLOC + Comments + Blank`. Linia z kodem i inline commentem (np. `x = 1  # init`) liczymy jako **SLOC** (tak samo robi `cloc`).
 
 **Punkt startowy:**
 
@@ -100,45 +109,71 @@ Napisz `loc_counter.py`, który:
 """LOC Counter - counting lines of code for Python files."""
 
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
+
+EXCLUDED_DIRS = {".venv", "venv", "__pycache__", ".git", "node_modules", ".tox", ".eggs"}
 
 
 @dataclass
 class FileStats:
     """Line count statistics for a single file."""
     path: str
-    loc: int = 0
-    sloc: int = 0
-    comments: int = 0
-    blank: int = 0
+    loc: int = 0       # Wszystkie linie
+    sloc: int = 0      # Kod (niepuste, niekomentarzowe)
+    comments: int = 0  # Komentarze (# oraz docstringi)
+    blank: int = 0     # Puste linie
+    # Invariant: loc == sloc + comments + blank
 
 
 def count_lines(filepath: Path) -> FileStats:
     """Count LOC, SLOC, comments, and blank lines in a Python file.
 
     Handles:
-    - Single-line comments (lines starting with #)
-    - Multi-line strings used as docstrings (triple quotes)
+    - Single-line comments (lines starting with #, after stripping whitespace)
+    - Multi-line docstrings/strings (triple quotes: ''' lub """)
     - Blank lines
-    - Inline comments (line has code AND comment)
+    - Inline comments (x = 1  # comment) -> liczone jako SLOC
+
+    Uwaga: triple-quoted strings przypisane do zmiennych (np. x = \"""...\""")
+    to technicznie kod, nie komentarze. Ale cloc traktuje je jako komentarze.
+    Wy zdecydujcie jak chcecie je liczyć — i uzasadnijcie w answers.md.
     """
     stats = FileStats(path=str(filepath))
 
     # TODO: Twój kod tutaj
     # Wskazówki:
-    # - Czytaj plik linia po linii
-    # - Śledź czy jesteś wewnątrz docstringa (triple quotes)
-    # - Linia może być: pusta, komentarz, kod, lub kod+komentarz
-    # - Docstringi: ''' lub """ otwierają i zamykają
-    #   Uwaga: mogą być jednoliniowe! np. """This is a docstring."""
+    # 1. Otwórz plik z encoding="utf-8" i errors="replace" (niektóre pliki
+    #    mogą mieć dziwne kodowanie i bez tego dostaniesz UnicodeDecodeError)
+    # 2. Czytaj plik linia po linii, śledź stan: czy jesteś wewnątrz
+    #    docstringa (triple quotes)
+    # 3. Dla każdej linii (po .strip()):
+    #    - Pusta -> blank
+    #    - Wewnątrz docstringa -> comments (sprawdź czy docstring się zamyka)
+    #    - Zaczyna się od """ lub ''' -> comments (sprawdź czy jednoliniowy)
+    #    - Zaczyna się od # -> comments
+    #    - Wszystko inne -> sloc
+    # 4. Docstringi: ''' lub """ otwierają i zamykają
+    #    Uwaga: mogą być jednoliniowe! np. """This is a docstring."""
+    #    Sprawdź czy po usunięciu otwierającego """ reszta zawiera zamykający.
+    # 5. Pułapka: x = """ NIE zaczyna się od """ (po strip to "x = ...").
+    #    Zamykający """ takiego stringa będzie osobną linią zaczynającą się
+    #    od """ - twój parser może go pomylić z otwarciem nowego docstringa.
+    #    To jest znane ograniczenie prostego parsera linia-po-linii.
+    #    Opisz to w answers.md.
 
     return stats
 
 
 def find_python_files(directory: Path) -> list[Path]:
-    """Recursively find all .py files in a directory."""
-    return sorted(directory.rglob("*.py"))
+    """Recursively find all .py files, skipping excluded directories."""
+    result = []
+    for path in sorted(directory.rglob("*.py")):
+        # Pomiń pliki w wykluczonych katalogach
+        if any(excluded in path.parts for excluded in EXCLUDED_DIRS):
+            continue
+        result.append(path)
+    return result
 
 
 def print_report(files_stats: list[FileStats]) -> None:
@@ -192,34 +227,38 @@ if __name__ == "__main__":
 **Oczekiwany output (przykład):**
 
 ```
-Znaleziono 42 plików .py
+Znaleziono 35 plików .py
 
 Plik                                                          LOC   SLOC   Comm  Blank
 --------------------------------------------------------------------------------------
-src/requests/__init__.py                                      178    112     38     28
-src/requests/api.py                                           157    102     32     23
-src/requests/models.py                                        987    714    143    130
+src/requests/__init__.py                                      183    103     47     33
+src/requests/api.py                                           157     47     73     37
+src/requests/models.py                                       1041    589    270    182
 ...
 --------------------------------------------------------------------------------------
-RAZEM                                                        8234   5891   1287   1056
+RAZEM                                                       11165   6810   2302   2053
 
-Plików: 42
-Komentarze/kod: 21.8%
-Puste/całość:   12.8%
+Plików: 35
+Komentarze/kod: 33.8%
+Puste/całość:   18.4%
 ```
 
 **Krok końcowy:** Porównaj wyniki z `cloc`:
 
 ```bash
-cloc requests/ --include-lang=Python --csv
-python loc_counter.py requests/
+cloc /tmp/requests/ --include-lang=Python
+python loc_counter.py /tmp/requests/
 ```
 
-Czy wyniki się zgadzają? Jeśli nie — dlaczego? (Podpowiedź: docstringi, `__init__.py`, różne definicje "komentarza".)
+Czy wyniki się zgadzają? Pewnie nie do końca. Opisz w `answers.md`:
+- Jakie są różnice (konkretne liczby)?
+- Dlaczego? (Podpowiedź: jak twój parser traktuje docstringi vs jak robi to cloc, stringi przypisane do zmiennych, inline comments.)
 
 ### Zadanie 3: Analiza trendów (45 min) — dla ambitnych
 
 Jak zmieniał się rozmiar projektu w czasie? Sprawdźmy.
+
+> **Uwaga:** Do tego zadania potrzebujesz pełnej kopii repozytorium (ze wszystkimi tagami). Jeśli klonowałeś z `--depth 1`, tagi nie będą dostępne. Sklonuj ponownie bez tego flaga.
 
 **Do zrobienia:**
 - Weź projekt ze stabilnymi tagami/wersjami (np. `requests` ma tagi `v2.20.0`, `v2.25.0`, `v2.28.0`, `v2.31.0`)
@@ -228,18 +267,26 @@ Jak zmieniał się rozmiar projektu w czasie? Sprawdźmy.
 
 ```python
 import subprocess
+import sys
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 
+# Zaimportuj swój loc_counter jako moduł
+# (loc_counter.py musi być w tym samym katalogu lub w PYTHONPATH)
+from loc_counter import find_python_files, count_lines
+
 tags = ["v2.20.0", "v2.25.0", "v2.28.0", "v2.31.0"]
-repo_path = "requests"
+repo_path = Path("/tmp/requests")
 sloc_per_tag = []
 
 for tag in tags:
     subprocess.run(["git", "checkout", tag], cwd=repo_path,
                    capture_output=True)
-    # Uruchom loc_counter i zbierz wynik (lub importuj jako moduł)
-    # ...
+    py_files = find_python_files(repo_path)
+    total_sloc = sum(count_lines(f).sloc for f in py_files)
     sloc_per_tag.append(total_sloc)
+    print(f"{tag}: {total_sloc} SLOC")
 
 # Przywróć główną gałąź
 subprocess.run(["git", "checkout", "main"], cwd=repo_path,
@@ -262,33 +309,51 @@ W swoim branchu `lab04_nazwisko1_nazwisko2`:
 
 1. **`loc_counter.py`** — działający licznik LOC z zadania 2
 2. **`comparison.csv`** — wyniki cloc dla 3 projektów z zadania 1
-3. **`answers.md`** — odpowiedzi na pytania z zadania 1 + porównanie wyników loc_counter vs cloc
+3. **`answers.md`** — odpowiedzi na pytania z zadania 1 + porównanie loc_counter vs cloc (z konkretnymi liczbami i wyjaśnieniami różnic)
 4. *(opcjonalnie)* **`loc_trend.png`** — wykres trendów z zadania 3
+
+**Nie commitujcie** sklonowanych repozytoriów (requests/, flask/ itp.), wirtualnych środowisk, ani __pycache__/.
 
 ## Kryteria oceny
 
 - `loc_counter.py` poprawnie liczy LOC, SLOC, komentarze i puste linie
-- Docstringi (triple quotes) są poprawnie zliczane jako komentarze
+- Zachowany invariant: LOC = SLOC + Comments + Blank
+- Docstringi (triple quotes) są obsługiwane (przynajmniej te zaczynające się od `"""` / `'''`)
 - Raport zawiera podsumowanie per-plik i ogólne
-- Porównanie z cloc: student opisuje różnice i wyjaśnia przyczyny
-- Analiza 3 projektów z zadania 1 zawiera konkretne wnioski
+- `comparison.csv` z wynikami cloc dla 3 projektów
+- `answers.md` zawiera odpowiedzi na pytania z zadania 1 ORAZ opis różnic loc_counter vs cloc z wyjaśnieniem przyczyn
 
 ## FAQ
 
 **P: Mój loc_counter daje inne wyniki niż cloc. Kto ma rację?**
-O: Prawdopodobnie oboje macie rację, ale liczycie co innego. `cloc` ma swoją definicję komentarza (np. inline comments po kodzie traktuje jako kod). Opisz różnice — to jest wartość edukacyjna tego zadania.
+O: Prawdopodobnie oboje macie rację, ale liczycie co innego. `cloc` ma swoją heurystykę do rozpoznawania komentarzy — np. triple-quoted stringi przypisane do zmiennych też traktuje jako komentarze. Opisz różnice — to jest sedno tego zadania.
 
 **P: Jak obsłużyć docstringi, które zaczynają się i kończą w jednej linii?**
-O: `"""Krótki docstring."""` — to jedna linia komentarza. Sprawdź czy linia zawiera otwierający I zamykający triple quote (po usunięciu otwierającego).
+O: `"""Krótki docstring."""` — to jedna linia komentarza. Sprawdź czy po usunięciu otwierającego `"""` reszta linii zawiera zamykający `"""`.
+
+**P: A co z `x = """\nmulti-line\nstring"""`? To docstring czy kod?**
+O: Technicznie to string przypisany do zmiennej — kod, nie komentarz. Ale cloc traktuje to jako komentarz. Twój prosty parser (sprawdzający `startswith('"""')`) tego nie złapie, bo linia zaczyna się od `x = `. To jest OK — opisz tę różnicę w answers.md. Jeśli chcesz być bliżej cloc, możesz szukać `"""` / `'''` w dowolnym miejscu linii, ale to komplikuje logikę.
+
+**P: Mój parser zjada prawdziwy kod po zamknięciu stringa. Co robię źle?**
+O: Klasyczny problem. Gdy `x = """` nie otwiera trybu docstringa w twoim parserze, to zamykający `"""` (osobna linia) zostaje zinterpretowany jako *otwarcie* nowego docstringa — i parser zaczyna liczyć kolejne linie kodu jako komentarze. To ograniczenie podejścia linia-po-linii bez pełnego parsowania. Opisz to. Jeśli chcesz to naprawić, rozważ moduł `tokenize`.
 
 **P: Czy `# type: ignore` to komentarz?**
-O: Technicznie tak — zaczyna się od `#`. Ale to adnotacja dla mypy, nie komentarz dla człowieka. Na potrzeby tego laba liczymy jako komentarz.
+O: Technicznie tak — zaczyna się od `#`. Na potrzeby tego laba: komentarz.
 
 **P: A co z shebangs (`#!/usr/bin/env python3`)?**
-O: cloc liczy to jako kod. Możesz traktować jak chcesz, ale udokumentuj swoją decyzję.
+O: cloc liczy to jako kod. Ty zdecyduj — ale udokumentuj swoją decyzję.
 
 **P: Mogę użyć modułu `ast` zamiast parsowania linia po linii?**
-O: `ast` nie daje informacji o komentarzach i pustych liniach (bo je ignoruje przy parsowaniu). Do pełnego LOC counter musisz czytać plik jako tekst. Ale `tokenize` z biblioteki standardowej może pomóc.
+O: `ast` nie daje informacji o komentarzach i pustych liniach (bo je ignoruje przy parsowaniu). Do pełnego LOC countera musisz czytać plik jako tekst. Ale `tokenize` z biblioteki standardowej może pomóc — daje tokeny dla komentarzy, stringów i kodu.
+
+**P: Mogę użyć ChatGPT / Claude do napisania parsera?**
+O: Możesz, ale ostrzegam — LLM-y lubią generować parser docstringów który wygląda ładnie a potem zjada `return` statement bo nie śledzi poprawnie stanu. Zweryfikuj output na prawdziwym projekcie. Gdyby to było takie proste, nikt by nie napisał cloc.
+
+**P: Mój skrypt skanuje tysiące plików z virtualenva. Pomocy.**
+O: Używaj `find_python_files` z template'u — ma wykluczenia na `.venv/`, `venv/`, `__pycache__/` i inne. Jeśli piszesz własną wersję, pamiętaj o filtrach. Albo po prostu wskazuj na konkretny katalog projektu, nie na `.`.
+
+**P: `UnicodeDecodeError` przy czytaniu pliku. Co jest?**
+O: Niektóre pliki w projektach OSS mają nietypowe kodowanie. Otwieraj pliki z `encoding="utf-8", errors="replace"` — to zamieni nieczytelne bajty na `�` zamiast rzucać wyjątek.
 
 ## Przydatne linki
 
