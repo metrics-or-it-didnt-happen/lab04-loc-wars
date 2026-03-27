@@ -1,0 +1,45 @@
+Znaleziono 36 plików .py
+
+Plik                                                            LOC   SLOC   Comm  Blank
+--------------------------------------------------------------------------------------
+/tmp/requests/docs/_themes/flask_theme_support.py                86     68      6     12
+/tmp/requests/docs/conf.py                                      386     77    215     94
+/tmp/requests/setup.py                                            9      6      0      3
+/tmp/requests/src/requests/__init__.py                          183    103     47     33
+/tmp/requests/src/requests/__version__.py                        14     10      3      1
+/tmp/requests/src/requests/_internal_utils.py                    51     25     15     11
+/tmp/requests/src/requests/adapters.py                          697    379    210    108
+/tmp/requests/src/requests/api.py                               157     47     73     37
+/tmp/requests/src/requests/auth.py                              314    205     45     64
+/tmp/requests/src/requests/certs.py                              18      3     10      5
+/tmp/requests/src/requests/compat.py                            106     60     27     19
+/tmp/requests/src/requests/cookies.py                           561    292    159    110
+/tmp/requests/src/requests/exceptions.py                        152     39     53     60
+/tmp/requests/src/requests/help.py                              131     98     11     22
+/tmp/requests/src/requests/hooks.py                              34     14     10     10
+/tmp/requests/src/requests/models.py                           1041    589    270    182
+/tmp/requests/src/requests/packages.py                           23     15      4      4
+/tmp/requests/src/requests/sessions.py                          834    361    323    150
+/tmp/requests/src/requests/status_codes.py                      128     15    101     12
+/tmp/requests/src/requests/structures.py                         99     40     32     27
+/tmp/requests/src/requests/utils.py                            1086    537    317    232
+/tmp/requests/tests/__init__.py                                  14      6      5      3
+/tmp/requests/tests/compat.py                                    23     19      0      4
+/tmp/requests/tests/conftest.py                                  58     37      4     17
+/tmp/requests/tests/test_adapters.py                              8      5      1      2
+/tmp/requests/tests/test_help.py                                 27     13      5      9
+/tmp/requests/tests/test_hooks.py                                22     15      0      7
+/tmp/requests/tests/test_lowlevel.py                            428    284     45     99
+/tmp/requests/tests/test_packages.py                             13      7      0      6
+/tmp/requests/tests/test_requests.py                           3039   2393    159    487
+/tmp/requests/tests/test_structures.py                           78     59      2     17
+/tmp/requests/tests/test_testserver.py                          165    112     17     36
+/tmp/requests/tests/test_utils.py                               987    725    126    136
+/tmp/requests/tests/testserver/server.py                        176    137      7     32
+/tmp/requests/tests/utils.py                                     17     15      0      2
+--------------------------------------------------------------------------------------
+RAZEM                                                         11165   6810   2302   2053
+
+Plików: 35
+Komentarze/kod: 33.8%
+Puste/całość:   18.4%
