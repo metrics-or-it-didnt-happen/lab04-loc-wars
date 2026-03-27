@@ -1,18 +1,13 @@
-*.aux
-*.log
-*.nav
-*.out
-*.snm
-*.toc
-*.vrb
-*.synctex.gz
-*.tex
-notatki.txt
-.env
+# Python-generated files
 __pycache__/
-*.pyc
-.venv/
-venv/
-.DS_Store
-Thumbs.db
-loc_counter_wzorcowka.py
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# uv lock
+uv.lock

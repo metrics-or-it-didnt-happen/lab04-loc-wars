@@ -1,0 +1,10 @@
+[project]
+name = "loc-wars"
+version = "0.1.0"
+description = "LOC Wars - counting lines of code"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "altair>=5",
+    "vl-convert-python>=1",
+]

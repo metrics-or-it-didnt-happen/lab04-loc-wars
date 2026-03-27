@@ -1,0 +1,9 @@
+[submodule "oss/requests"]
+	path = oss/requests
+	url = https://github.com/psf/requests.git
+[submodule "oss/flask"]
+	path = oss/flask
+	url = https://github.com/pallets/flask.git
+[submodule "oss/httpx"]
+	path = oss/httpx
+	url = https://github.com/encode/httpx.git
