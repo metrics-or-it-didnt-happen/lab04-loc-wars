@@ -1,0 +1,68 @@
+Znaleziono 60 plików .py
+
+Plik                                                            LOC   SLOC   Comm  Blank
+--------------------------------------------------------------------------------------
+httpx/httpx/__init__.py                                         106     99      0      7
+httpx/httpx/__version__.py                                        3      3      0      0
+httpx/httpx/_api.py                                             438    322     74     42
+httpx/httpx/_auth.py                                            348    220     54     74
+httpx/httpx/_client.py                                         2019   1483    287    249
+httpx/httpx/_config.py                                          248    184     25     39
+httpx/httpx/_content.py                                         240    171     25     44
+httpx/httpx/_decoders.py                                        393    253     59     81
+httpx/httpx/_exceptions.py                                      377    151    127     99
+httpx/httpx/_main.py                                            506    455      3     48
+httpx/httpx/_models.py                                         1277    904    202    171
+httpx/httpx/_multipart.py                                       300    213     29     58
+httpx/httpx/_status_codes.py                                    162    106     33     23
+httpx/httpx/_transports/__init__.py                              15     14      0      1
+httpx/httpx/_transports/asgi.py                                 187    117     24     46
+httpx/httpx/_transports/base.py                                  86     43     22     21
+httpx/httpx/_transports/default.py                              406    329     22     55
+httpx/httpx/_transports/mock.py                                  43     28      3     12
+httpx/httpx/_transports/wsgi.py                                 149     95     25     29
+httpx/httpx/_types.py                                           114     83     10     21
+httpx/httpx/_urlparse.py                                        527    309    132     86
+httpx/httpx/_urls.py                                            641    282    228    131
+httpx/httpx/_utils.py                                           242    128     72     42
+httpx/tests/client/test_async_client.py                         375    263     19     93
+httpx/tests/client/test_auth.py                                 772    539     51    182
+httpx/tests/client/test_client.py                               462    321     21    120
+httpx/tests/client/test_cookies.py                              168    120     12     36
+httpx/tests/client/test_event_hooks.py                          228    182      4     42
+httpx/tests/client/test_headers.py                              293    210     14     69
+httpx/tests/client/test_properties.py                            68     48      0     20
+httpx/tests/client/test_proxies.py                              265    213     23     29
+httpx/tests/client/test_queryparams.py                           35     25      0     10
+httpx/tests/client/test_redirects.py                            447    342     12     93
+httpx/tests/common.py                                             4      3      0      1
+httpx/tests/concurrency.py                                       15      8      3      4
+httpx/tests/conftest.py                                         287    227      8     52
+httpx/tests/models/test_cookies.py                               98     73      0     25
+httpx/tests/models/test_headers.py                              219    156     19     44
+httpx/tests/models/test_queryparams.py                          136    103      0     33
+httpx/tests/models/test_requests.py                             241    164      8     69
+httpx/tests/models/test_responses.py                           1040    766     40    234
+httpx/tests/models/test_url.py                                  863    575     82    206
+httpx/tests/models/test_whatwg.py                                52     27     16      9
+httpx/tests/test_api.py                                         102     69      2     31
+httpx/tests/test_asgi.py                                        224    158      6     60
+httpx/tests/test_auth.py                                        308    224     30     54
+httpx/tests/test_config.py                                      184    125      0     59
+httpx/tests/test_content.py                                     518    404      3    111
+httpx/tests/test_decoders.py                                    355    256     18     81
+httpx/tests/test_exceptions.py                                   63     41      7     15
+httpx/tests/test_exported_members.py                             13     11      0      2
+httpx/tests/test_main.py                                        187    159      0     28
+httpx/tests/test_multipart.py                                   469    374     11     84
+httpx/tests/test_status_codes.py                                 27     14      1     12
+httpx/tests/test_timeouts.py                                     55     38      1     16
+httpx/tests/test_utils.py                                       150    129      0     21
+httpx/tests/test_wsgi.py                                        203    148      2     53
+--------------------------------------------------------------------------------------
+RAZEM                                                         17753  12507   1869   3377
+CLOC                                                          17753  12187   2189   3377
+
+Plików: 57
+Komentarze/kod: 14.9%
+Puste/całość:   19.0%

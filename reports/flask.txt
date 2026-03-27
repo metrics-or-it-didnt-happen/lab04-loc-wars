@@ -1,0 +1,91 @@
+Znaleziono 83 plików .py
+
+Plik                                                            LOC   SLOC   Comm  Blank
+--------------------------------------------------------------------------------------
+flask/docs/conf.py                                              101     80      4     17
+flask/examples/celery/make_celery.py                              4      3      0      1
+flask/examples/celery/src/task_app/__init__.py                   39     31      0      8
+flask/examples/celery/src/task_app/tasks.py                      23     15      0      8
+flask/examples/celery/src/task_app/views.py                      38     28      0     10
+flask/examples/javascript/js_example/__init__.py                  5      3      0      2
+flask/examples/javascript/js_example/views.py                    18     13      0      5
+flask/examples/javascript/tests/conftest.py                      15     10      0      5
+flask/examples/javascript/tests/test_js_example.py               27     22      0      5
+flask/examples/tutorial/flaskr/__init__.py                       48     25     11     12
+flask/examples/tutorial/flaskr/auth.py                          116     82      8     26
+flask/examples/tutorial/flaskr/blog.py                          125     89     11     25
+flask/examples/tutorial/flaskr/db.py                             56     33      7     16
+flask/examples/tutorial/tests/conftest.py                        62     39      5     18
+flask/examples/tutorial/tests/test_auth.py                       69     46      7     16
+flask/examples/tutorial/tests/test_blog.py                       83     58      3     22
+flask/examples/tutorial/tests/test_db.py                         29     19      0     10
+flask/examples/tutorial/tests/test_factory.py                    12      8      0      4
+flask/src/flask/__init__.py                                      39     39      0      0
+flask/src/flask/__main__.py                                       3      2      0      1
+flask/src/flask/app.py                                         1625    718    607    300
+flask/src/flask/blueprints.py                                   128     66     36     26
+flask/src/flask/cli.py                                         1127    707    192    228
+flask/src/flask/config.py                                       367    150    136     81
+flask/src/flask/ctx.py                                          540    225    178    137
+flask/src/flask/debughelpers.py                                 179    134     12     33
+flask/src/flask/globals.py                                       77     47     11     19
+flask/src/flask/helpers.py                                      682    234    300    148
+flask/src/flask/json/__init__.py                                170     33     89     48
+flask/src/flask/json/provider.py                                215     79     84     52
+flask/src/flask/json/tag.py                                     327    168     68     91
+flask/src/flask/logging.py                                       79     37     18     24
+flask/src/flask/sansio/app.py                                  1010    372    458    180
+flask/src/flask/sansio/blueprints.py                            692    394    178    120
+flask/src/flask/sansio/scaffold.py                              792    313    328    151
+flask/src/flask/sessions.py                                     385    178    132     75
+flask/src/flask/signals.py                                       17     13      1      3
+flask/src/flask/templating.py                                   212    136     30     46
+flask/src/flask/testing.py                                      298    176     61     61
+flask/src/flask/typing.py                                        87     63     14     10
+flask/src/flask/views.py                                        191     65     81     45
+flask/src/flask/wrappers.py                                     257    101     93     63
+flask/tests/conftest.py                                         129     87      9     33
+flask/tests/test_appctx.py                                      265    186      8     71
+flask/tests/test_apps/blueprintapp/__init__.py                    9      7      0      2
+flask/tests/test_apps/blueprintapp/apps/admin/__init__.py        20     15      0      5
+.../tests/test_apps/blueprintapp/apps/frontend/__init__.py       14      9      0      5
+flask/tests/test_apps/cliapp/app.py                               3      2      0      1
+flask/tests/test_apps/cliapp/factory.py                          13      7      0      6
+flask/tests/test_apps/cliapp/importerrorapp.py                    5      3      0      2
+flask/tests/test_apps/cliapp/inner1/__init__.py                   3      2      0      1
+flask/tests/test_apps/cliapp/inner1/inner2/flask.py               3      2      0      1
+flask/tests/test_apps/cliapp/multiapp.py                          4      3      0      1
+flask/tests/test_apps/helloworld/hello.py                         8      5      0      3
+flask/tests/test_apps/helloworld/wsgi.py                          1      1      0      0
+flask/tests/test_apps/subdomaintestmodule/__init__.py             3      2      0      1
+flask/tests/test_async.py                                       145    104      0     41
+flask/tests/test_basic.py                                      1970   1438     45    487
+flask/tests/test_blueprints.py                                 1118    779     14    325
+flask/tests/test_cli.py                                         703    491     45    167
+flask/tests/test_config.py                                      250    191      2     57
+flask/tests/test_converters.py                                   42     29      0     13
+flask/tests/test_helpers.py                                     377    250     23    104
+flask/tests/test_instance_config.py                             111     80      0     31
+flask/tests/test_json.py                                        346    267      5     74
+flask/tests/test_json_tag.py                                     86     64      0     22
+flask/tests/test_logging.py                                      98     69      0     29
+flask/tests/test_regression.py                                   30     21      1      8
+flask/tests/test_reqctx.py                                      305    221      8     76
+flask/tests/test_request.py                                      70     50      3     17
+flask/tests/test_session_interface.py                            28     18      3      7
+flask/tests/test_signals.py                                     181    139      0     42
+flask/tests/test_subclassing.py                                  21     15      0      6
+flask/tests/test_templating.py                                  532    375     12    145
+flask/tests/test_testing.py                                     384    268      9    107
+flask/tests/test_user_error_handler.py                          295    207      8     80
+flask/tests/test_views.py                                       272    185      3     84
+flask/tests/type_check/typing_app_decorators.py                  32     18      0     14
+flask/tests/type_check/typing_error_handler.py                   33     21      0     12
+flask/tests/type_check/typing_route.py                          112     71      0     41
+--------------------------------------------------------------------------------------
+RAZEM                                                         18390  10756   3361   4273
+CLOC                                                          18390  10451   3666   4273
+
+Plików: 80
+Komentarze/kod: 31.2%
+Puste/całość:   23.2%
