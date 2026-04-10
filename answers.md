@@ -31,7 +31,62 @@ Czy wyniki się zgadzają? Pewnie nie do końca. Opisz w `answers.md`:
 - Dlaczego? (Podpowiedź: jak twój parser traktuje docstringi vs jak robi to cloc, stringi przypisane do zmiennych, inline comments.)
 
 Wyniki skryptu są w plikack **owncloc_`nazwa repozytria`.txt**
-Wyniki się róznią, ale są dość zbliżone.Może to wynikać z zastosowania różnych metod liczenia — cloc potrafi analizować wiele języków, podczas gdy własny skrypt obsługuje tylko Pythona. Również dane z cloc mogły zostać niepoprawnie przeliczone (np. stosunek linii komentarzy do kodu czy procent pustych linii) podczas ręcznego przenoszenia ich do kalkulatora.
+Wyniki się róznią, ale są dość zbliżone. To wynika z różnej ilości przeanalizowanych plików:
+| Repozytorium  | CLoc | Owncloc |
+|---------------|------|---------|
+| Django        | 2257 | 2894    |
+| Flask         | 80   | 83      |
+| Requests      | 35   | 36      |
+
+Również w inny sposób traktukje dockstrings. W pryzpadku 
+```py
+x = """
+tekst
+"""
+``` 
+Ostatnie cudzysłowy są liczone jako kometarz, jak i kod po nich do aż dopóki parser nie znajdzie zakonczenia tego pseudo komentarza. Co może zancznie zanurzyć danych. Cloc pracuje barziej kontekstowo i będzie widział że to jest definicja stringu, a nie kometarz.
+Nasz parser:
+
+traktujemy wszystkie triple-quoted stringi jako komentarze, jeśli zaczynają się od """ lub ''' po strip()
+liczy każdą linię docstringa jako comments
+
+cloc:
+
+rozpoznaje docstringi bardziej kontekstowo (np. tylko jako pierwszy element w funkcji/klasie/modułu)
+
+Efekt: możemy nadliczać komentarze względem cloc
+Główne źródła różnic:
+
+* Docstringi – uproszczone wykrywanie vs heurystyki cloc
+* Triple-quoted stringi w kodzie – brak rozróżnienia kontekstu
+* Parser liniowy – brak pełnej analizy składni
+
+Porównanie liczby linii kometarzy:
+| Repozytorium  | CLoc | Owncloc |
+|---------------|------|---------|
+| Django        | 58217| 66646   |
+| Flask         | 3666 | 3687    |
+| Requests      | 2072 | 2302    |
+
+Porównanie liczby linii pustych:
+| Repozytorium  | CLoc | Owncloc |
+|---------------|------|---------|
+| Django        |68152 | 68217   |
+| Flask         | 4273 | 4273    |
+| Requests      | 2053 | 2053    |
+
+Porównanie liczby linii kodu:
+| Repozytorium  | CLoc | Owncloc |
+|---------------|------|---------|
+| Django        |384503|376419   |
+| Flask         | 10451| 10430   |
+| Requests      | 7040 | 6810    |
+
+Jak widać z tablei owncloc często liczy więcej komentarzy niż cloc, ale lubi nie doszacować liczby linii kodu. TO właśnie pokazuje że liczymy czasami linii jako kometarzy chociaż bardziej zaawansowany cloc liczy to jako kod.
+
+Wniosek:
+Nasz parser jest prostszy i deterministyczny, ale mniej dokładny niż cloc, szczególnie w przypadkach granicznych związanych z """.
+
 ```c
 _ /\
 <(o )___~  ~  ~  ~  ~
