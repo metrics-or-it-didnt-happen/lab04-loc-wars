@@ -4,6 +4,7 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
+EXCLUDED_DIRS = {".venv", "venv", "__pycache__", ".git", "node_modules", ".tox", ".eggs"}
 
 @dataclass
 class FileStats:
@@ -89,7 +90,12 @@ def count_lines(filepath: Path) -> FileStats:
 
 def find_python_files(directory: Path) -> list[Path]:
     """Recursively find all .py files in a directory."""
-    return sorted(directory.rglob("*.py"))
+    result = []
+    for path in sorted(directory.rglob("*.py")):
+        if any(excluded in path.parts for excluded in EXCLUDED_DIRS):
+            continue
+        result.append(path)
+    return result
 
 
 def print_report(files_stats: list[FileStats]) -> None:
